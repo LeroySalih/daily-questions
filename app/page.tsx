@@ -46,10 +46,10 @@ export default async function Index() {
 
   return (
     <>
-    <h1>Daily Question {user?.email}</h1>
-    <h2><Link href="/question">Daily Question</Link></h2>
-    <h2><Link href={Urls['submit-a-question']}>Submit a question</Link></h2>
-    <pre>{JSON.stringify(data, null, 2)}</pre>
+    <h1>Daily Question {user?.email}</h1> 
+    <h2><Link href="/questions">Daily Question</Link></h2>
+    
+    
     </>
   )
 } 
