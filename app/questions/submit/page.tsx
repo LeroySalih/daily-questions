@@ -3,8 +3,7 @@
 import styles from './page.module.css'
 import {useState} from 'react';
 
-import Card from './card'
-import MyInput from "./RichEditorTipTap";
+
 
 
 export default function Page() {
@@ -12,7 +11,7 @@ export default function Page() {
    
 
     return <>
-       <Card />
+      
     </>
 }
 

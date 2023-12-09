@@ -23,6 +23,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/questions/submit/card-tbd/index.tsx.tbd", "app/api/question/submit/route.ts.tbd"],
   "exclude": ["node_modules"]
 }
