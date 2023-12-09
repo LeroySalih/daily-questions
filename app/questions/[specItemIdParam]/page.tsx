@@ -218,6 +218,7 @@ export default function Page () {
             return;
 
         answer.created_at = formatISO(new Date());
+
         try{
             console.log("Writing Answer to DB", answer);
             const {data,error} = await supabase.from("dqAnswers")
@@ -339,26 +340,6 @@ export default function Page () {
     return <>
     <div className={styles.pageHeader}>
         
-
-        <FormControlLabel
-          control={
-            <Switch checked={showAnswer}
-                onChange={() => setShowAnswer((prev) => !prev)}/>
-          }
-          label="Show Answer"
-        />
-
-        <FormControlLabel
-          control={
-            <Switch checked={showIsCorrect}
-                onChange={() => setShowIsCorrect((prev) => !prev)}/>
-          }
-          label="Show Is Correct"
-        />
-
-
-        
-        </div>
         <div className={styles.pageContainer}>
             {question && user && answer && <DisplayQuestion 
                 question={question}
@@ -370,21 +351,9 @@ export default function Page () {
                 onLikeStateChange={(state: number)=>{}}
                 onNextQuestion={handleNextQuestion}    
             />
-}
-            
-            <div>
-
-            <pre>User:{JSON.stringify(user?.email, null, 2)}</pre>
-        <pre>specItemId :{JSON.stringify(specItemId, null, 2)}</pre>
-        <pre>question :{JSON.stringify(question, null, 2)}</pre>
-        <pre>{question === undefined && <pre>Loading questions for specItem {specItemId}</pre>}</pre>
-        <pre>{question === null && <pre>No questions for specItem {specItemId}</pre>}</pre>
+            }
         
-        <pre>{answer && JSON.stringify(answer, null, 2)}</pre>
-        <pre>{!answer && <pre>No answer loaded</pre>}</pre>
-            
         </div>
         </div>
-        
     </>
 }

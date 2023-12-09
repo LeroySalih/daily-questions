@@ -63,19 +63,14 @@ export default function Page () {
 
     return <div>
         <h1>Questions</h1>
-        <pre>This page should list all spec items and show results for questions for each one.
-
-        </pre>
-        <pre>The user can select a spec item , and then navigate to the questions</pre>
-
         <SpecSelector onChange={handleSpecChange}/>
         {
             specItems && specItems?.sort((a: SpecItem, b: SpecItem) => a.tag! > b.tag! ? 1 : -1).map((s:SpecItem, index: number) => <div key={s.id}>
                 <Link href={`/questions/${s.id}`}>({s.tag}) {s.title}</Link>
-                <Link href={`/questions/submit/${s.id}`}> | Edit</Link>
+                <Link href={`/questions/submit/${s.id}`}> | Add</Link>
                 </div>)
         }
-        <pre>{JSON.stringify({currentSpec}, null, 2)}</pre>
+        
 
     </div>
 }

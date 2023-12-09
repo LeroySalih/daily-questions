@@ -47,7 +47,7 @@ export default async function Index() {
   return (
     <>
     <h1>Daily Question {user?.email}</h1> 
-    <h2><Link href="/questions">Daily Question</Link></h2>
+    <h2><Link href="/questions">Question Bank</Link></h2>
     
     
     </>
