@@ -1,0 +1,27 @@
+
+
+.container {
+    display: flex;
+    justify-items: center;
+    height: 80vh;
+    width: 100vw;
+    margin: auto;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    border: silver solid 1px;
+    border-radius: 1rem;
+    background-color: white;
+    padding: 3rem;
+}
+
+.card div {
+    margin:1rem;
+}
+
+.card button {
+    margin: 0.3rem;
+}
