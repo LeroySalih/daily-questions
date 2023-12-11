@@ -87,15 +87,13 @@ const Page = () => {
         setSaving(true);
         console.log("Form Data", data)
 
-        return;
-
         const insertQuestion = Object.assign({},  
             {
                 createdBy: user?.email,
                 specItemId: parseInt(specItemId),
                 questionType: 1,
                 questionData: { questionText: data.questionText, answers: [data.a0Text, data.a1Text, data.a2Text, data.a3Text]},
-                correctAnswer: parseInt(data.correctAnswer)
+                correctAnswer: data.correctAnswer
         });
 
         try{
