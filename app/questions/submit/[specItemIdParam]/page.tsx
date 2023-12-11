@@ -14,7 +14,32 @@ import Snackbar from '@mui/joy/Snackbar';
 
 import {useForm , SubmitHandler, Controller } from "react-hook-form";
 import { z } from 'zod';
+import { zodResolver } from "@hookform/resolvers/zod";
 import TipTap from "@/components/RichEditorTipTap";
+
+/*
+export const questionObject = z.object({
+    questionText: z.string().trim().min(2, {message: "Must be longer that 2 chars"}),
+    correctAnswer: z.number().gte(0, {message: "correct Answer must be greater than or equal to 0"}),
+    a0Text: z.string().trim().min(2,{message: "a0 must be longer than 2 chars"}),
+    a1Text: z.string().trim().min(2,{message: "a1 must be longer than 2 chars"}),
+    a2Text: z.string().trim().min(2,{message: "a2 must be longer than 2 chars"}),
+    a3Text: z.string().trim().min(2,{message: "a3 must be longer than 2 chars"}),
+});
+*/
+
+export const questionObject = z.object({
+    questionText: z.string(),
+    correctAnswer: z.string().transform((value) => parseInt(value, 10)),
+    a0Text: z.string(),
+    a1Text: z.string(),
+    a2Text: z.string(),
+    a3Text: z.string(),
+});
+
+
+export type QuestionTypeSchema = z.infer<typeof questionObject>
+
 
 const Page = () => {
     const {specItemIdParam} = useParams();
@@ -44,25 +69,25 @@ const Page = () => {
         reset,
         handleSubmit,
         watch,
-        formState: {errors}
-    } = useForm<Inputs>({
-        mode: "onBlur",
-        defaultValues: {
-        questionText : "",
-        a0Text: "",
-        a1Text: "",
-        a2Text: "",
-        a3Text: "",
-        correctAnswer: ""
-        }
+        trigger,
+        formState
+    } = useForm<QuestionTypeSchema>({
+        mode: "onChange",
+        resolver: zodResolver(questionObject)
     });
 
-    const saveQuestion = async (data: Inputs) => {
+    const formData = watch();
+
+    const {errors, isSubmitting, isValid} = formState;
+
+    const saveQuestion = async (data: QuestionTypeSchema) => {
 
         if (!user) return;
 
         setSaving(true);
-        console.log(data)
+        console.log("Form Data", data)
+
+        return;
 
         const insertQuestion = Object.assign({},  
             {
@@ -93,7 +118,7 @@ const Page = () => {
         
     }
 
-    const onSubmit: SubmitHandler<Inputs> = saveQuestion;
+    const onSubmit: SubmitHandler<QuestionTypeSchema> = saveQuestion;
 
 
     const loadUser = async (user: User | null) => {
@@ -102,11 +127,11 @@ const Page = () => {
 
     const handleAlertClose = () => {
         setAlert(false);
-    }
+    };
 
     useEffect(()=> {
         setAlert(true);
-    }, [alertMessage])
+    }, [alertMessage]);
 
 
     useEffect(()=> {
@@ -123,22 +148,27 @@ const Page = () => {
             loadUser(user);
             
         });
-    }, [])
+    }, []);
     
     
     return <div>
+        
         <Link href={`/questions`}>Back to questions</Link>
         <h1>Creating a New Question for {specItemIdParam} by {user && user.email}</h1>
         <div className={styles.container}>
-        <form className={styles.card} onSubmit={handleSubmit(onSubmit)}>
+        <form className={styles.card} 
+            
+            onSubmit={handleSubmit(onSubmit)} noValidate>
             <input placeholder="Question Text"
                 {...register("questionText")}
             />
 
             <div>
             <input type="radio" {...register("correctAnswer")} value={0}/>
+
             <input placeholder="Question Text"
-                {...register("a0Text")}
+                {...register("a0Text")
+                }
             />
             </div>
             <div>
@@ -161,10 +191,27 @@ const Page = () => {
             </div>
             <div>
             <Button variant="outlined" disabled={saving}>Cancel</Button>
-            <Button variant="contained" disabled={saving} type="submit">{!saving ? "Save" : "Saving"}</Button>
+            <Button variant="contained" disabled={saving 
+                
+                || !isValid
+                
+                } type="submit">
+                    {!saving && isValid && "Save"}
+                    {saving && "Saving"}
+                    {!isValid && "Not valid"}
+                </Button>
             </div>
             
         </form>
+        <div style={{"display": "flex", "flexDirection": "column"}}>
+            <div><pre>{JSON.stringify(formData, null, 2)}</pre></div>
+            <div><pre>{JSON.stringify(isValid, null, 2)}</pre></div>
+            <div><pre>{JSON.stringify(errors.questionText?.message , null, 2)}</pre></div>
+            <div><pre>{JSON.stringify(errors.a0Text?.message , null, 2)}</pre></div>
+            <div><pre>{JSON.stringify(errors.a1Text?.message , null, 2)}</pre></div>
+            <div><pre>{JSON.stringify(errors.a2Text?.message , null, 2)}</pre></div>
+            <div><pre>{JSON.stringify(errors.a3Text?.message , null, 2)}</pre></div>
+        </div>
         </div>
         <Snackbar 
             autoHideDuration={3000}
