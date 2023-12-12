@@ -68,7 +68,7 @@ export default function Page () {
         <SpecSelector onChange={handleSpecChange}/>
         {
             specItems && specItems?.sort((a: LoadSpecItemsQuestionCountRow, b: LoadSpecItemsQuestionCountRow) => a.tag! > b.tag! ? 1 : -1).map((s:LoadSpecItemsQuestionCountRow, index: number) => <div key={s.specitemid}>
-                <Link href={`/questions/${s.specitemid}`}>({s.tag}) {s.title} ({s.questiondatacount} questions)</Link>
+                <Link href={`/questions/${s.specitemid}`}>({s.tag}) {s.specitem_title} ({s.questiondatacount} questions)</Link>
                 <Link href={`/questions/submit/${s.specitemid}`}> | Add</Link>
                 </div>)
         }
