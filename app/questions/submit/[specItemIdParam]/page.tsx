@@ -28,7 +28,7 @@ export const questionObject = z.object({
 });
 */
 
-export const questionObject = z.object({
+const questionObject = z.object({
     questionText: z.string().min(1,"Must have more than 1 char"),
     correctAnswer: z.string().transform((value) => parseInt(value, 10)),
     a0Text: z.string().min(1,"Must have more than 1 char"),
