@@ -42,7 +42,7 @@ export type QuestionTypeSchema = z.infer<typeof questionObject>
 
 
 const Page = () => {
-    const debug = true;
+    const debug = false;
 
     const {specItemIdParam} = useParams();
     const [specItemId, setSpecItemId] = useState<string>(specItemIdParam as string);
