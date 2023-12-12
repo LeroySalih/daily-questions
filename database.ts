@@ -964,6 +964,20 @@ export interface Database {
       }
     }
     Functions: {
+      dq_getspecitemquestioncount: {
+        Args: {
+          _specid: number
+        }
+        Returns: {
+          specid: number
+          specitemid: number
+          title: string
+          subject: string
+          tag: string
+          specitem_title: string
+          questiondatacount: number
+        }[]
+      }
       dq_loadnextquestionbyspecitem: {
         Args: {
           _specitemid: number

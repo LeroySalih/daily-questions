@@ -1,0 +1,10 @@
+
+
+.ProseMirror {
+  border-bottom: silver solid 1px;
+}
+.ProseMirror:focus {
+  outline: none; /* Removes the default focus outline */
+  border: none; /* Removes the border */
+  border-bottom: silver solid 1px;
+}

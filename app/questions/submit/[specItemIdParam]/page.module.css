@@ -25,3 +25,14 @@
 .card button {
     margin: 0.3rem;
 }
+
+.answerField {
+    display : flex;
+    flex-direction: row;
+    border: solid silver 1px;
+    border-radius:1rem;
+}
+
+.ProseMirror-Focussed {
+    border: none;
+}

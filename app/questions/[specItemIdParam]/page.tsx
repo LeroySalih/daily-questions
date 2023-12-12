@@ -174,6 +174,11 @@ export default function Page () {
         });
         setAnswerHasChanged(true);
     }
+
+    const handleLikeStateChangeFromUser = (answer : Answer) => {
+        setAnswer(answer);
+        setAnswerHasChanged(true);
+    }
     
     const subscribeToDbEvents = () => {
         
@@ -220,7 +225,7 @@ export default function Page () {
         answer.created_at = formatISO(new Date());
 
         try{
-            console.log("Writing Answer to DB", answer);
+            console.log("Writing Answer to DB", user, answer);
             const {data,error} = await supabase.from("dqAnswers")
             .upsert(answer)
             .select("id")
@@ -348,7 +353,7 @@ export default function Page () {
                 showIsCorrect={showIsCorrect}
                 user={user}
                 onAnswerChange={handleAnswerChangeFromUser}
-                onLikeStateChange={(state: number)=>{}}
+                onLikeStateChange={handleLikeStateChangeFromUser}
                 onNextQuestion={handleNextQuestion}    
             />
             }

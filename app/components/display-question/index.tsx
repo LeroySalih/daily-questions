@@ -12,6 +12,14 @@ import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import StarHalfIcon from '@mui/icons-material/StarHalf';
+import StarIcon from '@mui/icons-material/Star';
+
+import EmojiFlagsIcon from '@mui/icons-material/EmojiFlags';
+import FlagIcon from '@mui/icons-material/Flag';
+
 import { QuestionWithSpec, Answer, LoadQuestionBySpecItemIdReturn } from "../../../alias";
 import styles from "./question.module.css";
 import {User} from "@supabase/supabase-js";
@@ -24,7 +32,7 @@ type DisplayEditProps = {
     showAnswer: boolean,
     user:User,
     onAnswerChange : (answer: Answer) => void,
-    onLikeStateChange  :(state: number) => void,
+    onLikeStateChange  :(answer: Answer) => void,
     onNextQuestion : (specItemId: number) => void
 }
 
@@ -50,6 +58,14 @@ const DisplayQuestion = ({
         const newObj = Object.assign({}, answer, {answer:index});       
         console.log(newObj);
         onAnswerChange(newObj);
+    }
+
+    const handleDislikeStateChange = () => {
+        console.log("Building Answer"); 
+        const likeState = answer.likeState == 0 ? -1 : 0;
+        const newObj = Object.assign({}, answer, {likeState});       
+        console.log(newObj);
+        onLikeStateChange(newObj);
     }
 
     if (!qData) {
@@ -92,26 +108,12 @@ const DisplayQuestion = ({
                 </div>  
                 <div>
                          
-                    {
-                        (answer.likeState || 0)<= 0 && (
-                    <IconButton aria-label="like">
-                        <ThumbUpOutlinedIcon onClick={() => onLikeStateChange(1)}/>
-                    </IconButton>
-                    )
-                    }
-
-                    {
-                        answer.likeState == 1 && (
-                    <IconButton aria-label="like">
-                        <ThumbUpIcon onClick={() => onLikeStateChange(1)}/>
-                    </IconButton>
-                    )
-                    }
+                    
 
                     {
                         ( answer.likeState >= 0 ) && (    
                     <IconButton aria-label="unlike">
-                        <ThumbDownOutlinedIcon onClick={() => onLikeStateChange(-1)}/>
+                        <ThumbDownOutlinedIcon onClick={handleDislikeStateChange}/>
                     </IconButton>
                     )
                     }
@@ -119,7 +121,7 @@ const DisplayQuestion = ({
                     {
                         answer.likeState == -1 && (
                     <IconButton aria-label="unlike">
-                        <ThumbDownIcon onClick={() => onLikeStateChange(-1)}/>
+                        <ThumbDownIcon onClick={handleDislikeStateChange}/>
                     </IconButton>
                     )
                     }

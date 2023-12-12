@@ -29,12 +29,12 @@ export const questionObject = z.object({
 */
 
 export const questionObject = z.object({
-    questionText: z.string(),
+    questionText: z.string().min(1,"Must have more than 1 char"),
     correctAnswer: z.string().transform((value) => parseInt(value, 10)),
-    a0Text: z.string(),
-    a1Text: z.string(),
-    a2Text: z.string(),
-    a3Text: z.string(),
+    a0Text: z.string().min(1,"Must have more than 1 char"),
+    a1Text: z.string().min(1,"Must have more than 1 char"),
+    a2Text: z.string().min(1,"Must have more than 1 char"),
+    a3Text: z.string().min(1,"Must have more than 1 char"),
 });
 
 
@@ -42,6 +42,8 @@ export type QuestionTypeSchema = z.infer<typeof questionObject>
 
 
 const Page = () => {
+    const debug = true;
+
     const {specItemIdParam} = useParams();
     const [specItemId, setSpecItemId] = useState<string>(specItemIdParam as string);
     const [user, setUser] = useState<User | null> (null);
@@ -52,7 +54,8 @@ const Page = () => {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
     const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
     const supabase = createClientComponentClient<Database>({supabaseUrl, supabaseKey});
-    
+    const router = useRouter();
+
     type Inputs = {
         questionText: string,
         a0Text: string,
@@ -127,6 +130,10 @@ const Page = () => {
         setAlert(false);
     };
 
+    const handleCancel = () => {
+        router.push("/questions")
+    }
+
     useEffect(()=> {
         setAlert(true);
     }, [alertMessage]);
@@ -154,41 +161,68 @@ const Page = () => {
         <Link href={`/questions`}>Back to questions</Link>
         <h1>Creating a New Question for {specItemIdParam} by {user && user.email}</h1>
         <div className={styles.container}>
-        <form className={styles.card} 
-            
+        <form className={styles.card}     
             onSubmit={handleSubmit(onSubmit)} noValidate>
-            <input placeholder="Question Text"
-                {...register("questionText")}
+            <Controller
+                name="questionText"
+                control={control}
+                defaultValue=""
+                render={({field}) => (
+                    <TipTap description={field.value} onChange={field.onChange}/>
+                )}
             />
+            
 
-            <div>
+            
+
+            <div className={styles.answerField}>
             <input type="radio" {...register("correctAnswer")} value={0}/>
 
-            <input placeholder="Question Text"
-                {...register("a0Text")
-                }
+            <Controller
+                name="a0Text"
+                control={control}
+                defaultValue=""
+                render={({field}) => (
+                    <TipTap description={field.value} onChange={field.onChange}/>
+                )}
             />
             </div>
-            <div>
+
+            <div className={styles.answerField}>
             <input type="radio"  {...register("correctAnswer")} value={1}/>
-            <input placeholder="Question Text"
-                {...register("a1Text")}
+            <Controller
+                name="a1Text"
+                control={control}
+                defaultValue=""
+                render={({field}) => (
+                    <TipTap description={field.value} onChange={field.onChange}/>
+                )}
             />
             </div>
-            <div>
+            <div className={styles.answerField}>
             <input type="radio"  {...register("correctAnswer")} value={2}/>
-            <input placeholder="Question Text"
-                {...register("a2Text")}
+            <Controller
+                name="a2Text"
+                control={control}
+                defaultValue=""
+                render={({field}) => (
+                    <TipTap description={field.value} onChange={field.onChange}/>
+                )}
             />
             </div>
-            <div>
+            <div className={styles.answerField}>
             <input type="radio"  {...register("correctAnswer")} value={3}/>
-            <input placeholder="Question Text"
-                {...register("a3Text")}
+            <Controller
+                name="a3Text"
+                control={control}
+                defaultValue=""
+                render={({field}) => (
+                    <TipTap description={field.value} onChange={field.onChange}/>
+                )}
             />
             </div>
             <div>
-            <Button variant="outlined" disabled={saving}>Cancel</Button>
+            <Button variant="outlined" disabled={saving} onClick={handleCancel}>Cancel</Button>
             <Button variant="contained" disabled={saving 
                 
                 || !isValid
@@ -201,6 +235,7 @@ const Page = () => {
             </div>
             
         </form>
+        {debug &&
         <div style={{"display": "flex", "flexDirection": "column"}}>
             <div><pre>{JSON.stringify(formData, null, 2)}</pre></div>
             <div><pre>{JSON.stringify(isValid, null, 2)}</pre></div>
@@ -209,7 +244,8 @@ const Page = () => {
             <div><pre>{JSON.stringify(errors.a1Text?.message , null, 2)}</pre></div>
             <div><pre>{JSON.stringify(errors.a2Text?.message , null, 2)}</pre></div>
             <div><pre>{JSON.stringify(errors.a3Text?.message , null, 2)}</pre></div>
-        </div>
+        </div>  
+        }
         </div>
         <Snackbar 
             autoHideDuration={3000}

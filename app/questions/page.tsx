@@ -7,11 +7,12 @@ import {Spec, SpecItem } from "../../alias";
 import Link from "next/link";
 
 import SpecSelector from "../components/spec-selector";
+import {LoadSpecItemsQuestionCount, LoadSpecItemsQuestionCountRow} from "@/alias";
 
 export default function Page () {
 
     const [currentSpec, setCurrentSpec] = useState<Spec | null | undefined>(null);
-    const [specItems, setSpecItems] = useState<SpecItem[] | null | undefined>(null);
+    const [specItems, setSpecItems] = useState<LoadSpecItemsQuestionCount | null | undefined>(null);
 
     const supabase = createBrowserClient<Database, "public">(
         process.env.NEXT_PUBLIC_SUPABASE_URL || "",
@@ -34,9 +35,10 @@ export default function Page () {
         }
 
         try{
-            const {data, error} = await supabase.from("SpecItem")
-                .select("id, created_at, SpecId, tag, title, revisionMaterials")
-                .eq("SpecId", spec.id)
+            let { data, error } = await supabase
+                        .rpc('dq_getspecitemquestioncount', {
+                            _specid: spec.id
+                        });
 
             if (error)  throw new Error(error.message);
 
@@ -65,9 +67,9 @@ export default function Page () {
         <h1>Questions</h1>
         <SpecSelector onChange={handleSpecChange}/>
         {
-            specItems && specItems?.sort((a: SpecItem, b: SpecItem) => a.tag! > b.tag! ? 1 : -1).map((s:SpecItem, index: number) => <div key={s.id}>
-                <Link href={`/questions/${s.id}`}>({s.tag}) {s.title}</Link>
-                <Link href={`/questions/submit/${s.id}`}> | Add</Link>
+            specItems && specItems?.sort((a: LoadSpecItemsQuestionCountRow, b: LoadSpecItemsQuestionCountRow) => a.tag! > b.tag! ? 1 : -1).map((s:LoadSpecItemsQuestionCountRow, index: number) => <div key={s.specitemid}>
+                <Link href={`/questions/${s.specitemid}`}>({s.tag}) {s.title} ({s.questiondatacount} questions)</Link>
+                <Link href={`/questions/submit/${s.specitemid}`}> | Add</Link>
                 </div>)
         }
         
